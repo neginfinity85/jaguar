@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" href="style.css"> -->
+    <title>NO8MM</title>
+    <style>
+        table,
+        tr,
+        td,
+        th {
+            border: 1px solid blue;
+            border-spacing: 0;
+        }
+
+        body {
+            font-size: 16px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        td,
+        th {
+            padding: 5px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .error {
+            color: red;
+            font-weight: 700;
+        }
+    </style>
+</head>
+
+<body>
+
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Position 1</th>
+            <th>Position 2</th>
+            <th>Postions 3</th>
+        </tr>
+
+    </table>
+
+    <script>
+        const stationArray = ['9mm', '9mr', '10', '11', '12mm', '12lm', '13', '14'];
+        const workers = [
+            {
+                name: 'Rasťo',
+                stations: stationArray,
+            },
+            // {
+            //     name: 'Zuzana',
+            //     stations: ['9mm', '9mr', '10', '11', '12mm', '12lm', '13', '14'],
+            // },
+            // {
+            //     name: 'Marina',
+            //     stations: stationArray,
+            // },
+            {
+                name: 'Braňo',
+                stations: ['9mr'],
+            },
+            {
+                name: 'Vika',
+                stations: ['9mr', '11', '12lm', '12mm', '13'],
+            },
+            {
+                name: 'Kaťa',
+                stations: stationArray,
+            },
+            {
+                name: 'Katka',
+                stations: ['9mm', '10', '11', '12lm', '14'],
+            },
+            {
+                name: 'Dada',
+                stations: ['9mr', '11', '12lm', '14'],
+            },
+            {
+                name: 'Maša',
+                stations: ['9mm', '9mr', '10', '11', '12lm', '12mm'],
+            },
+            {
+                name: 'Serhii',
+                stations: ['9mr', '9mm', '10', '13'],
+            }
+        ];
+
+
+        // Сортировка операторов по кол-ву изученных станций от меньшего к большему
+        workers.sort((a, b) => a.stations.length > b.stations.length ? 1 : -1);
+
+        let firstPosition = {}; // Первый набор позиций для операторов
+        let tmpStationsArray = ['9mm', '9mr', '10', '11', '12mm', '12lm', '13', '14']; // Временный массив со списком свободных станций
+
+
+        // Функция подбора позиций для операторов
+        function setWorkersToFirstPosition(worker, stations) {
+            let findFreeStation = false;
+
+            if (stations.length == 1) { //Если сотрудник знает только одну станцию ставим его на эту станцию
+                firstPosition[worker] = stations[0];
+                tmpStationsArray[tmpStationsArray.indexOf(firstPosition[worker])] = '0';
+                return;
+            }
+
+            // Проверка если станции которые знает сотрудник все заняты присваиваем еиу значение No Free Position
+            let isFreePostion = false;
+            let availableArr = []; // массив доступных станций
+            for (let a = 0; a < stations.length; a++) {
+                if (tmpStationsArray.indexOf(stations[a]) != -1) {
+                    isFreePostion = true;
+                    availableArr.push(stations[a]);
+                }
+            }
+
+            if (!isFreePostion) {
+                firstPosition[worker] = 'No Free Position';
+                return;
+            }
+
+            // Если свободной осталась только одна станция 
+            if (availableArr.length == 1) {
+                firstPosition[worker] = availableArr[0];
+                tmpStationsArray[tmpStationsArray.indexOf(firstPosition[worker])] = '0';
+                return;
+            }
+
+            // Проверка наличия доступных станций
+            let availablePosition = 0;
+            for (let i = 0; i < availableArr.length; i++) {
+                if (tmpStationsArray.indexOf(availableArr[i]) != -1) availablePosition++;
+            }
+
+            if (availablePosition == 0) {
+                firstPosition[worker] = '***'; // No available position
+                return;
+            }
+
+            // Подбор случайной позиции из списка свободных
+            while (!findFreeStation) {
+
+                firstPosition[worker] = stations[Math.floor(Math.random() * stations.length)];
+
+                if (tmpStationsArray.indexOf(firstPosition[worker]) != -1 && firstPosition[worker] != '0') {
+                    tmpStationsArray[tmpStationsArray.indexOf(firstPosition[worker])] = '0';
+                    findFreeStation = true;
+                }
+            }
+            return;
+        };
+
+        // Подбираем станции для всех операторов Первый список
+        for (let j = 0; j < stationArray.length; j++) {
+            setWorkersToFirstPosition(workers[j].name, workers[j].stations);
+        }
+
+        /* ======================================================================================================== */
+        let secondPosition = {}; // Второй набор позиций для операторов
+        let secondTmpStationsArray = ['9mm', '9mr', '10', '11', '12mm', '12lm', '13', '14']; // временный массив со списком свободных станций
+
+
+
+        // Создаем список вторых позиций
+        function setWorkersToSecondPosition(worker, stations) {
+            let findFreeStation = false;
+
+            if (stations.length == 1) { //Если сотрудник знает только одну станцию ставим его на эту станцию
+                secondPosition[worker] = stations[0];
+                secondTmpStationsArray[secondTmpStationsArray.indexOf(secondPosition[worker])] = '0';
+                return;
+            }
+
+            // Если сотрудник знает только две позиции ставим его на позицию отличную от первой
+            if (stations.length == 2) {
+                if (firstPosition[worker] == stations[0]) {
+                    secondPosition[worker] = stations[1];
+                    secondTmpStationsArray[secondTmpStationsArray.indexOf(secondPosition[worker])] = '0';
+                } else {
+                    secondPosition[worker] = stations[0];
+                    secondTmpStationsArray[secondTmpStationsArray.indexOf(secondPosition[worker])] = '0';
+                }
+                return;
+            }
+
+            // Проверка если станции которые знает сотрудник все заняты присваиваем ему значение No Free Position
+            let isFreePostion = false;
+            let availableArr = []; // массив доступных станций
+            for (let a = 0; a < stations.length; a++) {
+                if (secondTmpStationsArray.indexOf(stations[a]) != -1) {
+                    isFreePostion = true;
+                    availableArr.push(stations[a]);
+                }
+            }
+
+            if (!isFreePostion) {
+                secondPosition[worker] = 'No Free Position';
+                return;
+            }
+
+            // Если свободной осталась только одна станция 
+            if (availableArr.length == 1) {
+                secondPosition[worker] = availableArr[0];
+                secondTmpStationsArray[secondTmpStationsArray.indexOf(secondPosition[worker])] = '0';
+                return;
+            }
+
+            // // Проверка наличия доступных станций
+            let availablePosition = 0;
+            for (let i = 0; i < availableArr.length; i++) {
+                if (secondTmpStationsArray.indexOf(availableArr[i]) != -1 && availableArr[i] != firstPosition[worker]) availablePosition++;
+            }
+
+            if (availablePosition == 0) {
+                secondPosition[worker] = '***'; // No available position
+                return;
+            }
+
+            // Подбор случайной позиции из списка свободных
+            while (!findFreeStation) {
+
+                secondPosition[worker] = stations[Math.floor(Math.random() * stations.length)];
+
+                if (secondTmpStationsArray.indexOf(secondPosition[worker]) != -1 && secondPosition[worker] != '0' && secondPosition[worker] != firstPosition[worker]) {
+                    secondTmpStationsArray[secondTmpStationsArray.indexOf(secondPosition[worker])] = '0';
+                    findFreeStation = true;
+                }
+            }
+            return;
+        }
+
+        // Подбираем станции для всех операторов Второй список
+        for (let j = 0; j < stationArray.length; j++) {
+            setWorkersToSecondPosition(workers[j].name, workers[j].stations);
+        }
+
+        /* ======================================================================================================== */
+        let thirdPosition = {}; // Третий набор позиций для операторов
+        let thirdTmpStationsArray = ['9mm', '9mr', '10', '11', '12mm', '12lm', '13', '14']; // временный массив со списком свободных станций
+
+        function setWorkersToThirdPosition(worker, stations) {
+
+            if (stations.length == 1) { //Если сотрудник знает только одну станцию ставим его на эту станцию
+                thirdPosition[worker] = stations[0];
+                thirdTmpStationsArray[thirdTmpStationsArray.indexOf(thirdPosition[worker])] = '0';
+                return;
+            }
+
+            // Если сотрудник знает только две позиции ставим его на позицию firstPosition
+            if (stations.length == 2) {
+
+                thirdPosition[worker] = firstPosition[worker];
+                thirdTmpStationsArray[thirdTmpStationsArray.indexOf(thirdPosition[worker])] = '0';
+
+                return;
+            }
+
+            // Проверка если станции которые знает сотрудник все заняты присваиваем ему значение No Free Position
+            let isFreePostion = false;
+            let availableArr = []; // массив доступных станций
+            for (let a = 0; a < stations.length; a++) {
+                if (thirdTmpStationsArray.indexOf(stations[a]) != -1) {
+                    isFreePostion = true;
+                    availableArr.push(stations[a]);
+                }
+            }
+
+            if (!isFreePostion) {
+                thirdPosition[worker] = 'No Free Position'; //No Free position
+                return;
+            }
+
+            // Если свободной осталась только одна станция 
+            if (availableArr.length == 1) {
+                thirdPosition[worker] = availableArr[0];
+                thirdTmpStationsArray[thirdTmpStationsArray.indexOf(thirdPosition[worker])] = '0';
+                return;
+            }
+
+            // // Проверка наличия доступных станций
+            let availablePosition = 0;
+            for (let i = 0; i < availableArr.length; i++) {
+                if (thirdTmpStationsArray.indexOf(availableArr[i]) != -1 && availableArr[i] != firstPosition[worker] && availableArr[i] != secondPosition[worker]) availablePosition++;
+            }
+
+            if (availablePosition == 0) {
+                thirdPosition[worker] = '<span class="error">ERROR</span>'; // No available position
+                return;
+            }
+
+            // Подбор случайной позиции из списка свободных
+            let findFreeStation = false;
+            while (!findFreeStation) {
+
+                thirdPosition[worker] = stations[Math.floor(Math.random() * stations.length)];
+
+                if (thirdTmpStationsArray.indexOf(thirdPosition[worker]) != -1 && thirdPosition[worker] != '0' && thirdPosition[worker] != secondPosition[worker] && thirdPosition[worker] != firstPosition[worker]) {
+                    thirdTmpStationsArray[thirdTmpStationsArray.indexOf(thirdPosition[worker])] = '0';
+                    findFreeStation = true;
+                }
+            }
+            return;
+        }
+
+        // Подбираем станции для всех операторов Третий список
+        for (let j = 0; j < stationArray.length; j++) {
+            setWorkersToThirdPosition(workers[j].name, workers[j].stations);
+        }
+
+
+        // Вывод на страницу Операторов и их позиции
+        for (let key in firstPosition) {
+            let row = document.createElement('tr');
+            row.innerHTML = `
+              <td>${key}</td><td class="text-center">${firstPosition[key]}</td><td class="text-center">${secondPosition[key]}</td><td class="text-center">${thirdPosition[key]}</td>
+             `;
+            document.querySelector('table').append(row);
+        }
+
+
+
+
+    </script>
+</body>
+
+</html>

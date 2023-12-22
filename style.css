@@ -1,0 +1,30 @@
+table,
+tr,
+td,
+th {
+    border: 1px solid blue;
+    border-spacing: 0;
+}
+
+body {
+    font-size: 16px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+td,
+th {
+    padding: 5px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.error {
+    color: red;
+    font-weight: 700;
+}
