@@ -34,6 +34,8 @@ th {
 }
 
 .error {
-    color: red;
+    display: block;
+
+    background-color: red;
     font-weight: 700;
 }

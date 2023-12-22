@@ -20,11 +20,11 @@ const workers = [
 		stations: ['9mm', '9mr', '10', '11', '12mm', '12lm', '13', '14'],
 		active: true,
 	},
-	// {
-	//     name: 'Marina',
-	//     stations: stationsArray,
-	//     active: false,
-	// },
+	{
+		name: 'Marina',
+		stations: stationsArray,
+		active: false,
+	},
 	{
 		name: 'Braňo',
 		stations: ['8', '9mr'],
@@ -62,14 +62,9 @@ const workers = [
 	},
 ];
 
-// Сортировка операторов по кол-ву изученных станций от меньшего к большему
-workers.sort((a, b) => (a.stations.length > b.stations.length ? 1 : -1));
-
 /* ======================================================================================================== */
-let firstPosition = {}; // Первый набор позиций для операторов
-let firstTmpStationsArray = stationsArray.slice(); // Временный массив со списком свободных станций
 
-// Функция подбора позиций для операторов
+// Функция подбора первых позиций для операторов
 function setWorkersToFirstPosition(
 	worker,
 	stationsWichHeKnows,
@@ -87,7 +82,7 @@ function setWorkersToFirstPosition(
 		return;
 	}
 
-	// Проверка если станции которые знает сотрудник все заняты присваиваем еиу значение No Free Position
+	// Проверка если станции которые знает сотрудник все заняты присваиваем ему значение No Free position
 	let isFreePostion = false;
 	let availableArr = []; // массив доступных станций
 	for (let a = 0; a < stationsWichHeKnows.length; a++) {
@@ -98,7 +93,7 @@ function setWorkersToFirstPosition(
 	}
 
 	if (!isFreePostion) {
-		position[worker] = 'No Free Position';
+		position[worker] = '<span class="error">No Free position</span>';
 		return;
 	}
 
@@ -119,7 +114,7 @@ function setWorkersToFirstPosition(
 	}
 
 	if (availablePosition == 0) {
-		position[worker] = '***'; // No available position
+		position[worker] = '<span class="error">ERROR</span>'; // No available position
 		return;
 	}
 
@@ -143,21 +138,9 @@ function setWorkersToFirstPosition(
 	return;
 }
 
-// Подбираем станции для всех операторов Первый список
-for (let j = 0; j < stationsArray.length; j++) {
-	setWorkersToFirstPosition(
-		workers[j].name,
-		workers[j].stations,
-		firstPosition,
-		firstTmpStationsArray,
-	);
-}
-
 /* ======================================================================================================== */
-let secondPosition = {}; // Второй набор позиций для операторов
-let secondTmpStationsArray = [...stationsArray]; // временный массив со списком свободных станций
 
-// Создаем список вторых позиций
+// Создние списка вторых позиций
 function setWorkersToSecondPosition(
 	worker,
 	stationsWichHeKnows,
@@ -191,7 +174,7 @@ function setWorkersToSecondPosition(
 		return;
 	}
 
-	// Проверка если станции которые знает сотрудник все заняты присваиваем ему значение No Free Position
+	// Проверка если станции которые знает сотрудник все заняты присваиваем ему значение No Free position
 	let isFreePostion = false;
 	let availableArr = []; // массив доступных станций
 	for (let a = 0; a < stationsWichHeKnows.length; a++) {
@@ -202,7 +185,7 @@ function setWorkersToSecondPosition(
 	}
 
 	if (!isFreePostion) {
-		position[worker] = 'No Free Position';
+		position[worker] = '<span class="error">No Free position</span>';
 		return;
 	}
 
@@ -215,7 +198,7 @@ function setWorkersToSecondPosition(
 		return;
 	}
 
-	// // Проверка наличия доступных станций
+	// Проверка наличия доступных станций
 	let availablePosition = 0;
 	for (let i = 0; i < availableArr.length; i++) {
 		if (
@@ -226,7 +209,7 @@ function setWorkersToSecondPosition(
 	}
 
 	if (availablePosition == 0) {
-		position[worker] = '***'; // No available position
+		position[worker] = '<span class="error">ERROR</span>'; // No available position
 		return;
 	}
 
@@ -251,20 +234,9 @@ function setWorkersToSecondPosition(
 	return;
 }
 
-// Подбираем станции для всех операторов Второй список
-for (let j = 0; j < stationsArray.length; j++) {
-	setWorkersToSecondPosition(
-		workers[j].name,
-		workers[j].stations,
-		secondPosition,
-		secondTmpStationsArray,
-	);
-}
-
 /* ======================================================================================================== */
-let thirdPosition = {}; // Третий набор позиций для операторов
-let thirdTmpStationsArray = [...stationsArray]; // временный массив со списком свободных станций
 
+// Создание списка третих позиций
 function setWorkersToThirdPosition(
 	worker,
 	stationsWichHeKnows,
@@ -290,7 +262,7 @@ function setWorkersToThirdPosition(
 		return;
 	}
 
-	// Проверка если станции которые знает сотрудник все заняты присваиваем ему значение No Free Position
+	// Проверка если станции которые знает сотрудник все заняты присваиваем ему значение No Free position
 	let isFreePostion = false;
 	let availableArr = []; // массив доступных станций
 	for (let a = 0; a < stationsWichHeKnows.length; a++) {
@@ -301,7 +273,7 @@ function setWorkersToThirdPosition(
 	}
 
 	if (!isFreePostion) {
-		position[worker] = 'No Free Position'; //No Free position
+		position[worker] = '<span class="error">No Free position</span>'; //No Free position
 		return;
 	}
 
@@ -353,21 +325,68 @@ function setWorkersToThirdPosition(
 	return;
 }
 
-// Подбираем станции для всех операторов Третий список
-for (let j = 0; j < stationsArray.length; j++) {
-	setWorkersToThirdPosition(
-		workers[j].name,
-		workers[j].stations,
-		thirdPosition,
-		thirdTmpStationsArray,
-	);
-}
 /* ======================================================================================================== */
+// Сортировка операторов по кол-ву изученных станций от меньшего к большему
+workers.sort((a, b) => (a.stations.length > b.stations.length ? 1 : -1));
+
+let firstPosition = {}; // Первый набор позиций для операторов
+let firstTmpStationsArray = stationsArray.slice(); // Временный массив со списком свободных станций
+// Подбираем станции для всех операторов Первый список
+for (let j = 0; j < workers.length; j++) {
+	if (workers[j].active) {
+		setWorkersToFirstPosition(
+			workers[j].name,
+			workers[j].stations,
+			firstPosition,
+			firstTmpStationsArray,
+		);
+	}
+}
+
+let secondPosition = {}; // Второй набор позиций для операторов
+let secondTmpStationsArray = [...stationsArray]; // временный массив со списком свободных станций
+// Подбираем станции для всех операторов Второй список
+for (let j = 0; j < workers.length; j++) {
+	if (workers[j].active) {
+		setWorkersToSecondPosition(
+			workers[j].name,
+			workers[j].stations,
+			secondPosition,
+			secondTmpStationsArray,
+		);
+	}
+}
+
+let thirdPosition = {}; // Третий набор позиций для операторов
+let thirdTmpStationsArray = [...stationsArray]; // временный массив со списком свободных станций
+// Подбираем станции для всех операторов Третий список
+for (let j = 0; j < workers.length; j++) {
+	if (workers[j].active) {
+		setWorkersToThirdPosition(
+			workers[j].name,
+			workers[j].stations,
+			thirdPosition,
+			thirdTmpStationsArray,
+		);
+	}
+}
+
 // Вывод на страницу Операторов и их позиции
 for (let key in firstPosition) {
 	let row = document.createElement('tr');
 	row.innerHTML = `
-              <td>${key}</td><td class="text-center">${firstPosition[key]}</td><td class="text-center">${secondPosition[key]}</td><td class="text-center">${thirdPosition[key]}</td>
+              <td>${key}</td><td class="text-center">${
+		firstPosition[key]
+	}</td><td class="text-center">${
+		secondPosition[key] == firstPosition[key]
+			? '<span class="error">' + secondPosition[key] + '</span>'
+			: secondPosition[key]
+	}</td><td class="text-center">${
+		thirdPosition[key] == secondPosition[key] ||
+		thirdPosition[key] == firstPosition[key]
+			? '<span class="error">' + thirdPosition[key] + '</span>'
+			: thirdPosition[key]
+	}</td>
              `;
 	document.querySelector('table').append(row);
 }
