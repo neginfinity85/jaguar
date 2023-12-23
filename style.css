@@ -39,3 +39,28 @@ th {
     background-color: red;
     font-weight: 700;
 }
+
+.btn {
+    display: block;
+    margin: 30px auto 0;
+    padding: 12px 14px;
+
+    font-family: Arial,
+        'Segoe UI',
+        Tahoma,
+        Geneva,
+        Verdana,
+        sans-serif;
+    font-size: 16px;
+
+    border-radius: 10px;
+    border: 0;
+    background-color: #3ad613;
+    cursor: pointer;
+
+    transition: background 0.2s linear;
+}
+
+.btn:hover {
+    background-color: #2ab407;
+}
