@@ -2,26 +2,105 @@
     box-sizing: border-box;
 }
 
-table {
-    margin: 20px auto 0;
-}
-
-table,
-tr,
-td,
-th {
-    border: 1px solid blue;
-    border-spacing: 0;
-}
-
 body {
     margin: 0;
 
     font-size: 16px;
-    font-family: Arial, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: #000;
+    font-family: Roboto, sans-serif;
+    color: #ead7d7;
 
     background-color: #fff;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 0;
+}
+
+/* Tabs ======================================= */
+.tabs {
+    width: 340px;
+    min-height: 440px;
+    margin: 40px auto 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    border-radius: 10px;
+    background: rgb(79, 91, 94);
+    background: linear-gradient(90deg, rgba(79, 91, 94, 1) 1%, rgba(127, 130, 133, 1) 100%);
+}
+
+.tabs__names {
+    margin-top: 10px;
+    margin-bottom: 5px;
+    min-width: 320px;
+    display: flex;
+    justify-content: center;
+}
+
+.tabs__header {
+    margin-right: 3px;
+    width: 100px;
+    height: 30px;
+
+    font-size: 18px;
+    color: #000;
+    font-weight: 700;
+    text-align: center;
+    line-height: 1.8;
+
+    border-radius: 10px;
+    background-color: rgb(167, 166, 166);
+    cursor: pointer;
+
+    transition: background 0.2s linear;
+}
+
+.tabs__header:hover {
+    background-color: gray;
+}
+
+.tabs__header.active {
+    color: #fff;
+    background-color: rgb(45, 45, 163);
+}
+
+
+
+
+/* Table ====================================================== */
+.table {
+    border-radius: 10px;
+    border: 2px solid blue;
+    border-spacing: 0;
+}
+
+th,
+td {
+    border-bottom: 1px solid blue;
+}
+
+td:last-child {
+    border-bottom-right-radius: 9px;
+}
+
+td:first-child {
+    border-bottom-left-radius: 9px;
+}
+
+td,
+th {
+    border-right: 1px solid blue;
+}
+
+td:last-child,
+th:last-child {
+    border-right: 0;
 }
 
 td,
@@ -29,6 +108,7 @@ th {
     padding: 5px;
 }
 
+/* Helpers =================================================== */
 .text-center {
     text-align: center;
 }
@@ -40,16 +120,13 @@ th {
     font-weight: 700;
 }
 
+/* Buttons =================================================== */
 .btn {
     display: block;
-    margin: 30px auto 0;
+    margin: 30px auto 10px;
     padding: 12px 14px;
 
-    font-family: Arial,
-        'Segoe UI',
-        Tahoma,
-        Geneva,
-        Verdana,
+    font-family: Roboto,
         sans-serif;
     font-size: 16px;
 
@@ -63,4 +140,79 @@ th {
 
 .btn:hover {
     background-color: #2ab407;
+}
+
+/* Animation ================================================ */
+.show {
+    display: block;
+}
+
+.hide {
+    display: none;
+}
+
+.fade {
+    animation-name: fade;
+    animation-duration: 1.5s;
+}
+
+@keyframes fade {
+    from {
+        opacity: 0.1;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* Stations ================================= */
+.stations__header {
+    margin: 20px 0;
+
+    text-align: center;
+    font-size: 18px;
+    text-transform: uppercase;
+}
+
+.stations__content {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    padding-left: 20%;
+}
+
+.stations__content div {
+    margin-bottom: 7px;
+}
+
+.stations__content label {
+    font-size: 16px;
+    font-family: Robot, sans-serif;
+    font-weight: 700;
+}
+
+.stations__delete {
+    margin-left: 10px;
+
+    cursor: pointer;
+}
+
+/* Operators ================================ */
+.operators__header {
+    margin: 20px 0;
+
+    font-family: Roboto, sans-serif;
+    text-align: center;
+    font-size: 18px;
+    text-transform: uppercase;
+}
+
+/* Form ===================================== */
+.form__input {
+    width: 170px;
+    height: 30px;
+
+    border-radius: 3px;
+    outline: 0;
 }

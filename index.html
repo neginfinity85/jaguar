@@ -5,22 +5,64 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>Station</title>
+    <title>Station Application</title>
 </head>
 
 <body>
 
-    <table>
-        <tr>
-            <th>Name</th>
-            <th>Position 1</th>
-            <th>Position 2</th>
-            <th>Postions 3</th>
-        </tr>
+    <div class="tabs">
+        <div class="tabs__names">
+            <div class="tabs__header tabs__header--main active">Main</div>
+            <div class="tabs__header tabs__header--stations">Stations</div>
+            <div class="tabs__header tabs__header-operators">Operators</div>
+        </div>
 
-    </table>
+        <div class="tabs__item">
+            <table class="table">
+                <tr>
+                    <th>Name</th>
+                    <th>Position 1</th>
+                    <th>Position 2</th>
+                    <th>Postions 3</th>
+                </tr>
 
-    <button class="btn" id="makeNewList">Make new list</button>
+            </table>
+
+            <button class="btn" id="makeNewList">Make new list</button>
+        </div><!-- ./tabs__item -->
+
+        <div class="tabs__item hide">
+            <div class="stations">
+                <h3 class="stations__header">Stations</h3>
+                <div class="stations__content"></div>
+
+                <form class="form" action="/" id="stations" method="post">
+                    <div class="form__group">
+                        <input class="form__input" type="text" placeholder="Enter station name">
+                        <button class="btn" id="addStation">Add station</button>
+                    </div>
+                </form>
+
+            </div>
+        </div><!-- ./tabs__item -->
+
+        <div class="tabs__item hide">
+            <div class="operators">
+                <h3 class="operators__header">Operators</h3>
+                <div class="operators__content"></div>
+
+                <form class="form" action="/" id="stations" method="post">
+                    <div class="form__group">
+                        <input class="form__input" type="text" placeholder="Enter operator name">
+                        <button class="btn" id="addOperator">Add operator</button>
+                    </div>
+                </form>
+
+            </div>
+        </div><!-- ./tabs__item -->
+
+    </div><!-- ./tabs -->
+
 
     <script src="app.js"> </script>
 </body>

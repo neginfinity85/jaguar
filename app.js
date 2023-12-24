@@ -329,7 +329,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	/* ======================================================================================================== */
 	// Сортировка операторов по кол-ву изученных станций от меньшего к большему
 	workers.sort((a, b) => (a.stations.length > b.stations.length ? 1 : -1));
-	let tableTag = document.querySelector('table');
+	const tableTag = document.querySelector('table');
 
 	let firstPosition = {}; // Первый набор позиций для операторов
 	let firstTmpStationsArray = stationsArray.slice(); // Временный массив со списком свободных станций
@@ -400,7 +400,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	makeList();
 
-	let btn = document.getElementById('makeNewList');
+	const btn = document.getElementById('makeNewList');
 	btn.addEventListener('click', () => {
 		firstPosition = {};
 		secondPosition = {};
@@ -420,4 +420,85 @@ document.addEventListener('DOMContentLoaded', () => {
 
 		makeList();
 	});
+
+	// Tabs ================================================= //
+	const tabs = document.querySelectorAll('.tabs__header'),
+		tabsContent = document.querySelectorAll('.tabs__item'),
+		tabsParent = document.querySelector('.tabs');
+
+	function hideTabContent() {
+		tabsContent.forEach(item => {
+			item.classList.add('hide');
+			item.classList.remove('show', 'fade');
+		});
+
+		tabs.forEach(item => {
+			item.classList.remove('active');
+		});
+	}
+
+	function showTabContent(i = 0) {
+		tabsContent[i].classList.add('show', 'fade');
+		tabsContent[i].classList.remove('hide');
+		tabs[i].classList.add('active');
+	}
+
+	hideTabContent();
+	showTabContent();
+
+	tabsParent.addEventListener('click', event => {
+		const target = event.target;
+
+		if (target && target.classList.contains('tabs__header')) {
+			tabs.forEach((item, i) => {
+				if (target == item) {
+					hideTabContent();
+					showTabContent(i);
+				}
+			});
+		}
+	});
+
+	/* Show stations function ===================================================== */
+	const stationsContent = document.querySelector('.stations__content');
+	function showStations() {
+		for (let i = 0; i < stationsArray.length; i++) {
+			let checkBoxEl = document.createElement('INPUT');
+			checkBoxEl.setAttribute('type', 'checkbox');
+			checkBoxEl.setAttribute('checked', 'true');
+			checkBoxEl.setAttribute('id', `chkbx${stationsArray[i]}`);
+
+			let labelEl = document.createElement('label');
+			labelEl.setAttribute('for', `chkbx${stationsArray[i]}`);
+			labelEl.innerHTML = stationsArray[i].toUpperCase();
+
+			let spanElem = document.createElement('span');
+			spanElem.classList.add('stations__delete');
+			spanElem.innerHTML = '&#9940;';
+			spanElem.setAttribute('title', 'Delete station!');
+
+			let divElem = document.createElement('div');
+
+			stationsContent.append(divElem);
+			divElem.append(checkBoxEl);
+			divElem.append(labelEl);
+			divElem.append(spanElem);
+		}
+	}
+	showStations();
+
+	/* Show operators function ===================================================== */
+	const operatorsContent = document.querySelector('.operators__content');
+	function showOperators() {
+		for (let i = 0; i < workers.length; i++) {
+			let divElem = document.createElement('DIV');
+			let spanEl = document.createElement('SPAN');
+			spanEl = workers[i].name;
+
+			operatorsContent.append(divElem);
+			divElem.append(spanEl);
+		}
+	}
+
+	showOperators();
 }); // DOMContentLoaded
