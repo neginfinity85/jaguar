@@ -196,7 +196,6 @@ th {
     margin-left: 10px;
 
     cursor: pointer;
-    text-align: right;
 }
 
 /* Operators ================================ */
@@ -220,6 +219,12 @@ th {
 
 .operators--not-active {
     color: gray;
+}
+
+.operators__delete {
+    margin-left: 20px;
+
+    cursor: pointer;
 }
 
 /* Form ===================================== */

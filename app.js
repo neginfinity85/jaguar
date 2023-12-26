@@ -604,6 +604,13 @@ document.addEventListener('DOMContentLoaded', () => {
 			operActiveChkbx.setAttribute('value', `${workers[i].name}`);
 			operActiveChkbx.addEventListener('change', activateOperator);
 
+			let spanElem = document.createElement('SPAN');
+			spanElem.classList.add('operators__delete');
+			spanElem.innerHTML = '&#9940;';
+			spanElem.setAttribute('title', 'Remove operator!');
+			spanElem.setAttribute('value', `${workers[i].name}`);
+			spanElem.addEventListener('click', deleteOperator);
+
 			if (workers[i].active == false) {
 				operatorNameDiv.classList.add('operators--not-active');
 				divElem.classList.add('operators--not-active');
@@ -612,6 +619,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			operatorsContent.append(divElem);
 			divElem.append(operatorNameDiv);
 			operatorNameDiv.append(operActiveChkbx);
+			operatorNameDiv.append(spanElem);
 
 			for (let j = 0; j < stationsArray.length; j++) {
 				let checkBoxEl = document.createElement('INPUT');
@@ -675,6 +683,18 @@ document.addEventListener('DOMContentLoaded', () => {
 		let newOperatorName = document.getElementById('newOperatorName').value;
 		newOperatorName = newOperatorName.trim();
 
+		for (let i = 0; i < workers.length; i++) {
+			if (
+				workers[i].name.toLocaleUpperCase() ===
+				newOperatorName.toLocaleUpperCase()
+			) {
+				alert(`ERROR: You already have an operator with the same name!
+				ПОМИЛКА: У вас уже є оператор із таким самим ім'ям!
+				CHYBA: Už máte operátora s rovnakým menom!`);
+				return;
+			}
+		}
+
 		if (newOperatorName != '' && newOperatorName != undefined) {
 			let newWorker = {
 				name: newOperatorName,
@@ -682,6 +702,7 @@ document.addEventListener('DOMContentLoaded', () => {
 				stations: [],
 			};
 			workers.push(newWorker);
+			document.getElementById('operators').reset();
 			sortWorkers();
 			showOperators();
 		}
@@ -689,4 +710,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	const addOperator = document.getElementById('addOperator');
 	addOperator.addEventListener('click', addNewOperator);
+
+	/* Delete operator function =============================================== */
+	function deleteOperator(event) {
+		let operator = event.target.getAttribute('value');
+
+		for (let i = 0; i < workers.length; i++) {
+			if (workers[i].name === operator) {
+				workers.splice(i, 1);
+			}
+		}
+
+		showOperators();
+	}
 }); // DOMContentLoaded
