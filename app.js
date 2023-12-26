@@ -523,7 +523,6 @@ document.addEventListener('DOMContentLoaded', () => {
 		let newStationName = document.getElementById('newStationName').value;
 		newStationName = newStationName.trim();
 
-		console.log(newStationName);
 		if (
 			newStationName != '' &&
 			newStationName != '0' &&
@@ -541,6 +540,18 @@ document.addEventListener('DOMContentLoaded', () => {
 	let addStationButton = document.getElementById('addStation');
 	addStationButton.addEventListener('click', addStation);
 
+	/* Activate and Deactivate operator function ================================================ */
+	function activateOperator(event) {
+		let operator = event.target;
+		console.log(operator);
+		for (let i = 0; i < workers.length; i++) {
+			if (workers[i].name == operator.value) {
+				workers[i].active = operator.checked;
+			}
+		}
+		showOperators();
+	}
+
 	/* Show operators function ===================================================== */
 	const operatorsContent = document.querySelector('.operators__content');
 	function showOperators() {
@@ -556,6 +567,8 @@ document.addEventListener('DOMContentLoaded', () => {
 			let operActiveChkbx = document.createElement('INPUT');
 			operActiveChkbx.setAttribute('type', 'checkbox');
 			operActiveChkbx.checked = workers[i].active;
+			operActiveChkbx.setAttribute('value', `${workers[i].name}`);
+			operActiveChkbx.addEventListener('click', activateOperator);
 
 			if (workers[i].active == false) {
 				operatorNameDiv.classList.add('operators--not-active');
