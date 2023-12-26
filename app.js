@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-	const stationsArray = [
+	let stationsArray = [
 		'8',
 		'9mm',
 		'9mr',
@@ -10,6 +10,9 @@ document.addEventListener('DOMContentLoaded', () => {
 		'13',
 		'14',
 	];
+
+	stationsArray.sort();
+
 	const workers = [
 		{
 			name: 'Rasťo',
@@ -341,7 +344,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	let thirdTmpStationsArray = [...stationsArray]; // временный массив со списком свободных станций
 
 	function makeList() {
-		// Check count of stations and operators
+		// Check count of stations and active operators
 		let activeWorkersCount = 0;
 		workers.forEach(item => {
 			item.active ? activeWorkersCount++ : 0;
@@ -351,6 +354,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			tableTag.innerHTML = `
 			<tr>
 			<td class="error">ERROR: the number of operators and stations should be the same!<br>
+			ПОМИЛКА: кількість операторів і станцій має бути однаковою!<br>
 			ОШИБКА: количество операторов и станций должно быть одинаковое!<br>
 			CHYBA: počet operátorov a staníc musí byť rovnaký!</td>
 			</tr>
@@ -478,34 +482,69 @@ document.addEventListener('DOMContentLoaded', () => {
 	/* Show stations function ===================================================== */
 	const stationsContent = document.querySelector('.stations__content');
 	function showStations() {
+		stationsContent.innerHTML = '';
 		for (let i = 0; i < stationsArray.length; i++) {
-			let checkBoxEl = document.createElement('INPUT');
-			checkBoxEl.setAttribute('type', 'checkbox');
-			checkBoxEl.checked = true;
-			checkBoxEl.setAttribute('id', `chkbx${stationsArray[i]}`);
+			let stationNameEl = document.createElement('SPAN');
+			stationNameEl.innerHTML = stationsArray[i].toUpperCase();
 
-			let labelEl = document.createElement('label');
-			labelEl.setAttribute('for', `chkbx${stationsArray[i]}`);
-			labelEl.innerHTML = stationsArray[i].toUpperCase();
-
-			let spanElem = document.createElement('span');
+			let spanElem = document.createElement('SPAN');
 			spanElem.classList.add('stations__delete');
 			spanElem.innerHTML = '&#9940;';
 			spanElem.setAttribute('title', 'Delete station!');
 
 			let divElem = document.createElement('div');
+			divElem.setAttribute('title', `${stationsArray[i]}`);
 
 			stationsContent.append(divElem);
-			divElem.append(checkBoxEl);
-			divElem.append(labelEl);
+			divElem.append(stationNameEl);
 			divElem.append(spanElem);
+			spanElem.addEventListener('click', deleteStation);
 		}
 	}
 	showStations();
 
+	/* Delete station function ===================================================== */
+	function deleteStation(event) {
+		const station = event.target.parentElement.getAttribute('title');
+		const index = stationsArray.indexOf(station);
+		stationsArray.splice(index, 1);
+		workers.forEach(item => {
+			if (item.stations.indexOf(station) != -1) {
+				item.stations.splice(item.stations.indexOf(station), 1);
+			}
+		});
+		showStations();
+		showOperators();
+	}
+
+	/* Add station function ===================================================== */
+	function addStation(event) {
+		event.preventDefault();
+		let newStationName = document.getElementById('newStationName').value;
+		newStationName = newStationName.trim();
+
+		console.log(newStationName);
+		if (
+			newStationName != '' &&
+			newStationName != '0' &&
+			stationsArray.indexOf(newStationName) == -1
+		) {
+			stationsArray.push(newStationName);
+			document.getElementById('stations').reset();
+			stationsArray.sort();
+
+			showStations();
+			showOperators();
+		}
+	}
+
+	let addStationButton = document.getElementById('addStation');
+	addStationButton.addEventListener('click', addStation);
+
 	/* Show operators function ===================================================== */
 	const operatorsContent = document.querySelector('.operators__content');
 	function showOperators() {
+		operatorsContent.innerHTML = '';
 		for (let i = 0; i < workers.length; i++) {
 			let divElem = document.createElement('DIV');
 			divElem.classList.add('operators__line');
