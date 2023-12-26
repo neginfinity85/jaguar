@@ -465,7 +465,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		for (let i = 0; i < stationsArray.length; i++) {
 			let checkBoxEl = document.createElement('INPUT');
 			checkBoxEl.setAttribute('type', 'checkbox');
-			checkBoxEl.setAttribute('checked', 'true');
+			checkBoxEl.checked = true;
 			checkBoxEl.setAttribute('id', `chkbx${stationsArray[i]}`);
 
 			let labelEl = document.createElement('label');
@@ -492,11 +492,47 @@ document.addEventListener('DOMContentLoaded', () => {
 	function showOperators() {
 		for (let i = 0; i < workers.length; i++) {
 			let divElem = document.createElement('DIV');
-			let spanEl = document.createElement('SPAN');
-			spanEl = workers[i].name;
+			divElem.classList.add('operators__line');
+
+			let operatorNameDiv = document.createElement('DIV');
+			operatorNameDiv.setAttribute('class', 'operators__name');
+			operatorNameDiv.innerHTML = workers[i].name;
+
+			let operActiveChkbx = document.createElement('INPUT');
+			operActiveChkbx.setAttribute('type', 'checkbox');
+			operActiveChkbx.checked = workers[i].active;
+
+			if (workers[i].active == false) {
+				operatorNameDiv.classList.add('operators--not-active');
+				divElem.classList.add('operators--not-active');
+			}
 
 			operatorsContent.append(divElem);
-			divElem.append(spanEl);
+			divElem.append(operatorNameDiv);
+			operatorNameDiv.append(operActiveChkbx);
+
+			for (let j = 0; j < stationsArray.length; j++) {
+				let checkBoxEl = document.createElement('INPUT');
+				checkBoxEl.setAttribute('type', 'checkbox');
+
+				if (workers[i].stations.indexOf(stationsArray[j]) != -1) {
+					checkBoxEl.checked = true;
+				}
+
+				checkBoxEl.setAttribute(
+					'id',
+					`${workers[i].name}_${stationsArray[j]}`,
+				);
+
+				let labelEl = document.createElement('LABEL');
+				labelEl.setAttribute(
+					'for',
+					`${workers[i].name}_${stationsArray[j]}`,
+				);
+				labelEl.innerHTML = stationsArray[j].toUpperCase();
+
+				divElem.append(checkBoxEl, labelEl);
+			}
 		}
 	}
 
