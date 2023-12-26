@@ -341,6 +341,22 @@ document.addEventListener('DOMContentLoaded', () => {
 	let thirdTmpStationsArray = [...stationsArray]; // временный массив со списком свободных станций
 
 	function makeList() {
+		// Check count of stations and operators
+		let activeWorkersCount = 0;
+		workers.forEach(item => {
+			item.active ? activeWorkersCount++ : 0;
+		});
+
+		if (activeWorkersCount != stationsArray.length) {
+			tableTag.innerHTML = `
+			<tr>
+			<td class="error">ERROR: the number of operators and stations should be the same!<br>
+			ОШИБКА: количество операторов и станций должно быть одинаковое!<br>
+			CHYBA: počet operátorov a staníc musí byť rovnaký!</td>
+			</tr>
+			`;
+			return;
+		}
 		// Подбираем станции для всех операторов Первый список
 		for (let j = 0; j < workers.length; j++) {
 			if (workers[j].active) {
