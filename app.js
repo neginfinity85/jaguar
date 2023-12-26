@@ -16,7 +16,17 @@ document.addEventListener('DOMContentLoaded', () => {
 	const workers = [
 		{
 			name: 'Rasťo',
-			stations: stationsArray,
+			stations: [
+				'8',
+				'9mm',
+				'9mr',
+				'10',
+				'11',
+				'12mm',
+				'12lm',
+				'13',
+				'14',
+			],
 			active: true,
 		},
 		{
@@ -26,7 +36,17 @@ document.addEventListener('DOMContentLoaded', () => {
 		},
 		{
 			name: 'Marina',
-			stations: stationsArray,
+			stations: [
+				'8',
+				'9mm',
+				'9mr',
+				'10',
+				'11',
+				'12mm',
+				'12lm',
+				'13',
+				'14',
+			],
 			active: false,
 		},
 		{
@@ -41,7 +61,17 @@ document.addEventListener('DOMContentLoaded', () => {
 		},
 		{
 			name: 'Kaťa',
-			stations: stationsArray,
+			stations: [
+				'8',
+				'9mm',
+				'9mr',
+				'10',
+				'11',
+				'12mm',
+				'12lm',
+				'13',
+				'14',
+			],
 			active: true,
 		},
 		{
@@ -331,7 +361,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	/* ======================================================================================================== */
 	// Сортировка операторов по кол-ву изученных станций от меньшего к большему
-	workers.sort((a, b) => (a.stations.length > b.stations.length ? 1 : -1));
+	function sortWorkers() {
+		workers.sort((a, b) =>
+			a.stations.length > b.stations.length ? 1 : -1,
+		);
+	}
+	sortWorkers();
 	const tableTag = document.querySelector('table');
 
 	let firstPosition = {}; // Первый набор позиций для операторов
@@ -543,7 +578,6 @@ document.addEventListener('DOMContentLoaded', () => {
 	/* Activate and Deactivate operator function ================================================ */
 	function activateOperator(event) {
 		let operator = event.target;
-		console.log(operator);
 		for (let i = 0; i < workers.length; i++) {
 			if (workers[i].name == operator.value) {
 				workers[i].active = operator.checked;
@@ -568,7 +602,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			operActiveChkbx.setAttribute('type', 'checkbox');
 			operActiveChkbx.checked = workers[i].active;
 			operActiveChkbx.setAttribute('value', `${workers[i].name}`);
-			operActiveChkbx.addEventListener('click', activateOperator);
+			operActiveChkbx.addEventListener('change', activateOperator);
 
 			if (workers[i].active == false) {
 				operatorNameDiv.classList.add('operators--not-active');
@@ -582,6 +616,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			for (let j = 0; j < stationsArray.length; j++) {
 				let checkBoxEl = document.createElement('INPUT');
 				checkBoxEl.setAttribute('type', 'checkbox');
+				checkBoxEl.addEventListener('change', learnNewStation);
 
 				if (workers[i].stations.indexOf(stationsArray[j]) != -1) {
 					checkBoxEl.checked = true;
@@ -605,4 +640,53 @@ document.addEventListener('DOMContentLoaded', () => {
 	}
 
 	showOperators();
+
+	/* Operator learn new station function =============================================== */
+	function learnNewStation(event) {
+		let target = event.target;
+		let arr = target.id.split('_');
+		let operatorName = arr[0];
+		let newStation = arr[1];
+
+		if (target.checked) {
+			for (let i = 0; i < workers.length; i++) {
+				if (workers[i].name == operatorName) {
+					workers[i].stations.push(newStation);
+				}
+			}
+		} else {
+			for (let i = 0; i < workers.length; i++) {
+				if (workers[i].name == operatorName) {
+					workers[i].stations.forEach((item, index) => {
+						if (item == newStation) {
+							workers[i].stations.splice(index, 1);
+						}
+					});
+				}
+			}
+		}
+		sortWorkers();
+	}
+
+	/* Add new operator function =============================================== */
+	function addNewOperator(event) {
+		event.preventDefault();
+
+		let newOperatorName = document.getElementById('newOperatorName').value;
+		newOperatorName = newOperatorName.trim();
+
+		if (newOperatorName != '' && newOperatorName != undefined) {
+			let newWorker = {
+				name: newOperatorName,
+				active: false,
+				stations: [],
+			};
+			workers.push(newWorker);
+			sortWorkers();
+			showOperators();
+		}
+	}
+
+	const addOperator = document.getElementById('addOperator');
+	addOperator.addEventListener('click', addNewOperator);
 }); // DOMContentLoaded
