@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	stationsArray.sort();
 
-	const workers = [
+	let workers = [
 		{
 			name: 'Rasťo',
 			stations: [
@@ -95,6 +95,9 @@ document.addEventListener('DOMContentLoaded', () => {
 			active: true,
 		},
 	];
+
+	/* ============================================================================ */
+	loadSettingsFromLocalStorage();
 
 	/* ======================================================================================================== */
 
@@ -550,6 +553,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		});
 		showStations();
 		showOperators();
+		saveSettingsToLocalStorage();
 	}
 
 	/* Add station function ===================================================== */
@@ -569,6 +573,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 			showStations();
 			showOperators();
+			saveSettingsToLocalStorage();
 		}
 	}
 
@@ -584,6 +589,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			}
 		}
 		showOperators();
+		saveSettingsToLocalStorage();
 	}
 
 	/* Show operators function ===================================================== */
@@ -674,6 +680,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			}
 		}
 		sortWorkers();
+		saveSettingsToLocalStorage();
 	}
 
 	/* Add new operator function =============================================== */
@@ -705,6 +712,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			document.getElementById('operators').reset();
 			sortWorkers();
 			showOperators();
+			saveSettingsToLocalStorage();
 		}
 	}
 
@@ -722,5 +730,27 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 
 		showOperators();
+		saveSettingsToLocalStorage();
+	}
+
+	/* Load Settings from localStorage function =============================================== */
+	function loadSettingsFromLocalStorage() {
+		if (localStorage.jaguarStations != undefined) {
+			stationsArray = JSON.parse(localStorage.jaguarStations);
+		} else {
+			localStorage.jaguarStations = JSON.stringify(stationsArray);
+		}
+
+		if (localStorage.jaguarWorkers != undefined) {
+			workers = JSON.parse(localStorage.jaguarWorkers);
+		} else {
+			localStorage.jaguarWorkers = JSON.stringify(workers);
+		}
+	}
+
+	/* Save Settings to localStorage function =============================================== */
+	function saveSettingsToLocalStorage() {
+		localStorage.jaguarStations = JSON.stringify(stationsArray);
+		localStorage.jaguarWorkers = JSON.stringify(workers);
 	}
 }); // DOMContentLoaded

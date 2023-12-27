@@ -7,7 +7,7 @@ body {
 
     font-size: 16px;
     font-family: Roboto, sans-serif;
-    color: #ead7d7;
+    color: #fff;
 
     background-color: #fff;
 }
@@ -33,8 +33,7 @@ h6 {
     align-items: center;
 
     border-radius: 10px;
-    background: rgb(79, 91, 94);
-    background: linear-gradient(90deg, rgba(79, 91, 94, 1) 1%, rgba(127, 130, 133, 1) 100%);
+    background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
 .tabs__names {
@@ -209,8 +208,8 @@ th {
 
 .operators__name {
     color: orange;
+    font-weight: 700;
     text-transform: uppercase;
-    cursor: pointer;
 }
 
 .operators__line {
