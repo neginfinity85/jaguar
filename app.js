@@ -546,6 +546,11 @@ document.addEventListener('DOMContentLoaded', () => {
 	/* Delete station function ===================================================== */
 	function deleteStation(event) {
 		const station = event.target.parentElement.getAttribute('title');
+
+		if (!confirm(`Do you want to remove station ${station}?`)) {
+			return;
+		}
+
 		const index = stationsArray.indexOf(station);
 		stationsArray.splice(index, 1);
 		workers.forEach(item => {
@@ -763,7 +768,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	function deleteOperator(event) {
 		let operator = event.target.getAttribute('value');
 
-		if (!confirm('Do you want to delete the operator?')) {
+		if (!confirm(`Do you want to delete the operator ${operator}?`)) {
 			return;
 		}
 
