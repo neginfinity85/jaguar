@@ -371,6 +371,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	}
 	sortWorkers();
 	const tableTag = document.querySelector('table');
+	const modal = document.querySelector('.modal');
+	const modalContent = document.querySelector('.modal__content');
 
 	let firstPosition = {}; // Первый набор позиций для операторов
 	let firstTmpStationsArray = stationsArray.slice(); // Временный массив со списком свободных станций
@@ -389,14 +391,14 @@ document.addEventListener('DOMContentLoaded', () => {
 		});
 
 		if (activeWorkersCount != stationsArray.length) {
-			tableTag.innerHTML = `
-			<tr>
-			<td class="error">ERROR: the number of operators and stations should be the same!<br>
-			ПОМИЛКА: кількість операторів і станцій має бути однаковою!<br>
-			ОШИБКА: количество операторов и станций должно быть одинаковое!<br>
-			CHYBA: počet operátorov a staníc musí byť rovnaký!</td>
-			</tr>
+			modalContent.innerHTML = `
+			 <div class="modal__close" data-close>&times;</div>
+			 <div>CHYBA: počet operátorov a staníc musí byť rovnaký!</div>
+			<div>ERROR: the number of operators and stations should be the same!</div>
+			<div>ПОМИЛКА: кількість операторів і станцій має бути однаковою!</div>			
+			<button class="btn" data-close>OK</button>
 			`;
+			showModalWindow();
 			return;
 		}
 		// Подбираем станции для всех операторов Первый список
@@ -560,7 +562,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	function addStation(event) {
 		event.preventDefault();
 		let newStationName = document.getElementById('newStationName').value;
-		newStationName = newStationName.trim();
+		newStationName = newStationName.trim().toLowerCase();
 
 		if (
 			newStationName != '' &&
@@ -574,6 +576,36 @@ document.addEventListener('DOMContentLoaded', () => {
 			showStations();
 			showOperators();
 			saveSettingsToLocalStorage();
+		} else {
+			switch (newStationName) {
+				case '':
+					modalContent.innerHTML = `
+					<div class="modal__close" data-close>&times;</div>
+					<div>CHYBA: Názov stanice nemôže byť prázdny!</div>
+					<div>ERROR: Station name cannot be empty!</div>
+					<div>ПОМИЛКА: Ім'я станції не може бути порожнім!</div>			
+					<button class="btn" data-close>OK</button>
+					`;
+					break;
+				case '0':
+					modalContent.innerHTML = `
+					<div class="modal__close" data-close>&times;</div>
+					<div>CHYBA: Názov stanice nemôže byť 0</div>
+					<div>ERROR: The station name cannot be 0</div>
+					<div>ПОМИЛКА: Ім'я станції не може бути 0</div>			
+					<button class="btn" data-close>OK</button>
+					`;
+					break;
+				default:
+					modalContent.innerHTML = `
+					<div class="modal__close" data-close>&times;</div>
+					<div>CHYBA: Už máte stanicu s názvom  ${newStationName}</div>
+					<div>ERROR: You already have a station named ${newStationName}</div>
+					<div>ПОМИЛКА: У Вас уже є станція з ім'ям ${newStationName}</div>			
+					<button class="btn" data-close>OK</button>
+					`;
+			}
+			showModalWindow();
 		}
 	}
 
@@ -695,9 +727,14 @@ document.addEventListener('DOMContentLoaded', () => {
 				workers[i].name.toLocaleUpperCase() ===
 				newOperatorName.toLocaleUpperCase()
 			) {
-				alert(`ERROR: You already have an operator with the same name!
-				ПОМИЛКА: У вас уже є оператор із таким самим ім'ям!
-				CHYBA: Už máte operátora s rovnakým menom!`);
+				modalContent.innerHTML = `
+					<div class="modal__close" data-close>&times;</div>
+					<div>CHYBA: Už máte operátora s rovnakým menom!</div>
+					<div>ERROR: You already have an operator with the same name!</div>
+					<div>ПОМИЛКА:У вас уже є оператор із таким самим ім'ям!</div>			
+					<button class="btn" data-close>OK</button>
+					`;
+				showModalWindow();
 				return;
 			}
 		}
@@ -752,5 +789,24 @@ document.addEventListener('DOMContentLoaded', () => {
 	function saveSettingsToLocalStorage() {
 		localStorage.jaguarStations = JSON.stringify(stationsArray);
 		localStorage.jaguarWorkers = JSON.stringify(workers);
+	}
+
+	/* Show and Close Modal Window functions =============================================== */
+	modal.addEventListener('click', e => {
+		if (e.target === modal || e.target.getAttribute('data-close') == '') {
+			closeModalWindow();
+		}
+	});
+
+	function closeModalWindow() {
+		modal.classList.add('hide');
+		modal.classList.remove('show');
+		document.body.style.overflow = '';
+	}
+
+	function showModalWindow() {
+		modal.classList.add('show');
+		modal.classList.remove('hide');
+		document.body.style.overflow = 'hidden';
 	}
 }); // DOMContentLoaded
