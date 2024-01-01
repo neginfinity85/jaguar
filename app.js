@@ -660,6 +660,8 @@ document.addEventListener('DOMContentLoaded', () => {
 			operatorNameDiv.append(spanElem);
 
 			for (let j = 0; j < stationsArray.length; j++) {
+				let stationDiv = document.createElement('div');
+				stationDiv.classList.add('inline');
 				let checkBoxEl = document.createElement('INPUT');
 				checkBoxEl.setAttribute('type', 'checkbox');
 				checkBoxEl.addEventListener('change', learnNewStation);
@@ -680,7 +682,8 @@ document.addEventListener('DOMContentLoaded', () => {
 				);
 				labelEl.innerHTML = stationsArray[j].toUpperCase();
 
-				divElem.append(checkBoxEl, labelEl);
+				divElem.append(stationDiv);
+				stationDiv.append(checkBoxEl, labelEl);
 			}
 		}
 	}
@@ -759,6 +762,10 @@ document.addEventListener('DOMContentLoaded', () => {
 	/* Delete operator function =============================================== */
 	function deleteOperator(event) {
 		let operator = event.target.getAttribute('value');
+
+		if (!confirm('Do you want to delete the operator?')) {
+			return;
+		}
 
 		for (let i = 0; i < workers.length; i++) {
 			if (workers[i].name === operator) {

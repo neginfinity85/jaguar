@@ -126,6 +126,10 @@ th {
     border-radius: 10px;
 }
 
+.inline {
+    display: inline-block;
+}
+
 /* Buttons =================================================== */
 .btn {
     display: block;
